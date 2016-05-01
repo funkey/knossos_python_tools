@@ -60,9 +60,8 @@ def apply_mergelist(np.ndarray[np.uint64_t, ndim=3] segmentation, mergelist_cont
     cdef Py_ssize_t x, y, z
     cdef np.uint64_t subobject_id
     cdef np.uint64_t object_id
-    cdef np.uint64_t new_subobject_id
 
-    cdef unordered_map[np.uint64_t, np.uint64_t] object_map
+    print "running modified apply_mergelist: create array of object ids"
 
     for z in xrange(pad, depth - pad):
         for y in xrange(pad, height - pad):
@@ -71,15 +70,7 @@ def apply_mergelist(np.ndarray[np.uint64_t, ndim=3] segmentation, mergelist_cont
                 if subobject_id == background_id:
                     continue
                 object_id = subobject_map[subobject_id]
-                new_subobject_id = subobject_id
-                object_map_it = object_map.find(object_id)
-
-                if object_map_it != object_map.end():
-                    new_subobject_id =  dereference(object_map_it).second
-                else:
-                    object_map[object_id] = subobject_id
-
-                segmentation[x, y, z] = new_subobject_id
+                segmentation[x, y, z] = object_id
 
     return segmentation
 

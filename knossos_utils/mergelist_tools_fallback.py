@@ -29,30 +29,7 @@ def apply_mergelist(segmentation, mergelist_content, background_id=0, pad=0):
     :param pad:
         optional padding that is excluded from mergelist application
     """
-    subobject_map = subobject_map_from_mergelist(mergelist_content)
-    width = segmentation.shape[0]
-    height = segmentation.shape[1]
-    depth = segmentation.shape[2]
-
-    object_map = {}
-
-    for z in xrange(pad, depth - pad):
-        for y in xrange(pad, height - pad):
-            for x in xrange(pad, width - pad):
-                subobject_id = segmentation[x, y, z]
-                if subobject_id == background_id:
-                    continue
-                object_id = subobject_map[subobject_id]
-                new_subobject_id = subobject_id
-
-                if object_id in object_map.keys():
-                    new_subobject_id = object_map[object_id]
-                else:
-                    object_map[object_id] = subobject_id
-
-                segmentation[x, y, z] = new_subobject_id
-
-    return segmentation
+    raise "this is slow and broken, don't use the fallback. compile the cython sources using setup.py install"
 
 
 def gen_mergelist_from_segmentation(segmentation, background_id=0, pad=0, offsets=np.array([0, 0, 0], dtype=np.uint64)):
